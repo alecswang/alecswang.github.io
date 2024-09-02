@@ -1,0 +1,143 @@
+/* page load */
+.css-transitions-only-after-page-load * {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+}
+
+#instagram {
+  position: relative;
+  width: 60px;
+}
+
+#instagramBlack {
+  width: 40px;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: all 0.5s ease-in-out 0s;
+}
+
+#instagram:hover #instagramBlack {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+#instagramColor {
+  width: 40px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  opacity: 0;
+  transition: all 0.5s ease-in-out 0s;
+}
+
+#instagram:hover #instagramColor {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+
+#linkedin {
+  position: relative;
+  width: 60px;
+}
+
+#linkedinBlack {
+  width: 32px;
+  margin: auto;
+  padding-top: 4px;
+  padding-left: 4px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: all 0.5s ease-in-out 0s;
+}
+
+#linkedin:hover #linkedinBlack {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+#linkedinColor {
+  width: 40px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  opacity: 0;
+  transition: all 0.5s ease-in-out 0s;
+}
+
+#linkedin:hover #linkedinColor {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+#github {
+  position: relative;
+  width: 60px;
+}
+
+#githubBlack {
+  width: 32px;
+  margin: auto;
+  padding-top: 4px;
+  padding-left: 4px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transition: all 0.5s ease-in-out 0s;
+}
+
+#github:hover #githubBlack {
+  opacity: 0;
+  transform: scale(1.1);
+}
+
+#githubColor {
+  width: 40px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  opacity: 0;
+  transition: all 0.5s ease-in-out 0s;
+}
+
+#github:hover #githubColor {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+footer{
+  margin: 0 auto 0;
+  place-items:center;
+  padding: 80px 0 80px;
+  /* margin-top: 60px; */
+  /* background-color: rgb(208, 242, 218); */
+  display: flex;
+  justify-content: space-between; /* Ensures there is space between the two divs */
+}
+
+footer div{
+  margin: 0 auto 0;
+  display: grid;
+  place-items:center;
+  flex: 1; /* Each div will take up an equal amount of space */
+}
+
+#links{
+  display: flex;
+  margin-top: 30px;
+  padding-left: 18px;
+}
+
+#contactMe{
+  /* float: right; */
+  font-size: 30px;
+}
