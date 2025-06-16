@@ -50,8 +50,6 @@
 #linkedinBlack {
   width: 32px;
   margin: auto;
-  padding-top: 4px;
-  padding-left: 4px;
   top: 0;
   bottom: 0;
   left: 0;
@@ -86,8 +84,6 @@
 #githubBlack {
   width: 32px;
   margin: auto;
-  padding-top: 4px;
-  padding-left: 4px;
   top: 0;
   bottom: 0;
   left: 0;
@@ -140,4 +136,42 @@ footer div{
 #contactMe{
   /* float: right; */
   font-size: 30px;
+}
+/* Update your existing icon styles like this: */
+#instagram, #github, #linkedin {
+  position: relative;
+  display: inline-block;
+  width: 40px; /* fixed width */
+  height: 40px; /* fixed height */
+  margin: 0 10px; /* consistent spacing */
+}
+
+#instagramBlack, #githubBlack, #linkedinBlack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: all 0.5s ease-in-out;
+}
+
+#instagramColor, #githubColor, #linkedinColor {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+/* Modify hover to only affect opacity, not position */
+#instagram:hover #instagramBlack,
+#github:hover #githubBlack,
+#linkedin:hover #linkedinBlack {
+  opacity: 0;
+  /* Remove the transform to prevent layout shift */
+}
+
+#instagram:hover #instagramColor,
+#github:hover #githubColor,
+#linkedin:hover #linkedinColor {
+  opacity: 1;
+  /* Remove the transform to prevent layout shift */
 }
