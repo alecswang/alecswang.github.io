@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>AI TV Voice Assistant — Case Study</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <style>
+        /* Lightweight case-study specific tweaks matching the site aesthetic */
+
+        body {
+            display: block;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .case-container {
+            width: min(92vw, 1000px);
+            margin: 40px auto;
+            padding: 24px;
+        }
+
+        #case-title {
+            font-size: clamp(36px, 6vw, 72px);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #case-title span {
+            color: white;
+            -webkit-text-stroke-width: 2px;
+            -webkit-text-stroke-color: black;
+        }
+
+        .case-meta {
+            text-align: center;
+            color: #444;
+            margin-bottom: 18px;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            align-items: start;
+            grid-template-areas: "aside" "main";
+        }
+
+        /* ensure aside content is spaced evenly and adapts */
+        .case-grid aside {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: stretch;
+            grid-area: aside;
+        }
+
+        /* keep aside visible at the top on large screens */
+        @media (min-width: 800px) {
+            .case-grid aside {
+                position: sticky;
+                top: 20px;
+            }
+        }
+
+        .case-grid aside .case-section {
+            margin: 0;
+        }
+
+        @media (min-width: 800px) {
+            .case-grid {
+                grid-template-columns: 1fr 320px;
+                gap: 32px;
+                grid-template-areas: "main aside";
+            }
+
+            .case-container {
+                width: min(92vw, 1100px);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .case-grid {
+                grid-template-columns: 1fr 420px;
+                gap: 36px;
+            }
+
+            .case-container {
+                width: min(92vw, 1200px);
+            }
+        }
+
+        .case-section {
+            background: #fff;
+            padding: 22px;
+            border: 2px solid #000;
+            margin-bottom: 14px;
+        }
+
+        .case-section h2 {
+            margin: 0 0 12px 0;
+            font-size: clamp(18px, 2.8vw, 28px);
+        }
+
+        .case-section h3,
+        .case-section h4 {
+            margin: 0 0 10px 0;
+        }
+
+        .case-section p,
+        .case-section li,
+        .case-section ol,
+        .case-section ul {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        /* Restore list markers for case study lists (override global reset) */
+        /* Restore list markers for case study lists (override global reset) */
+        .case-section ol {
+            list-style: decimal outside;
+            list-style-type: decimal;
+            list-style-position: outside;
+            padding-left: 1.75rem;
+            margin-left: 0;
+        }
+
+        .case-section ul {
+            list-style: disc outside;
+            list-style-type: disc;
+            list-style-position: outside;
+            padding-left: 1.75rem;
+            margin-left: 0;
+        }
+
+        .case-section ol li,
+        .case-section ul li {
+            display: list-item;
+            margin-bottom: 10px;
+        }
+
+        /* marker styling (numbers/bullets) */
+        .case-section li::marker {
+            color: #000;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        /* Fallback using CSS counters so markers appear even if global reset hides them */
+        .case-section ol {
+            counter-reset: cs-counter;
+        }
+
+        .case-section ol li {
+            counter-increment: cs-counter;
+            position: relative;
+        }
+
+        .case-section ol li::before {
+            content: counter(cs-counter) ".";
+            position: absolute;
+            left: -1.5rem;
+            width: 1.25rem;
+            text-align: right;
+            color: #000;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .case-section ul li::before {
+            content: "•";
+            position: absolute;
+            left: -1.25rem;
+            width: 1rem;
+            text-align: center;
+            color: #000;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .case-section ol li,
+        .case-section ul li {
+            padding-left: 0.5rem;
+        }
+
+        .context-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media(min-width:720px) {
+            .context-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .context-card {
+            background: #fff;
+            border: 1px solid #e6e0d8;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-head h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+
+        .card-icon {
+            flex: 0 0 auto;
+        }
+
+        .muted {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .case-image {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        .sidebyside-images {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .sidebyside-item {
+            width: 50%;
+            overflow: hidden;
+        }
+
+        .sidebyside-item .case-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        @media(max-width:700px) {
+            .sidebyside-images {
+                flex-direction: column;
+            }
+
+            .sidebyside-item {
+                width: 100%;
+            }
+        }
+
+        aside {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: stretch;
+            grid-area: aside;
+        }
+
+        @media(min-width:800px) {
+            aside {
+                position: sticky;
+                top: 20px;
+            }
+        }
+
+        @media(min-width:800px) {
+            .case-grid {
+                grid-template-columns: 1fr 320px;
+            }
+        }
+
+        /* Table styles (match Bentolicious): full-width, simple black-on-white borders */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="case-container">
+        <a class="back-link" href="./index.html">← Back to portfolio</a>
+        <h1 id="case-title"><span>TV Voice Assistant,</span> 2025</h1>
+        <p class="case-meta">Internship work — Voice-enabled assistant for connected TV using on-device recognition and
+            cloud AI agents.</p>
+        <p class="case-meta"><em>Skills:</em> Anthropic API, MCP (Model Context Principle), Android, Voice Recognition,
+            Kotlin/Java, System Integration.</p>
+        <div class="case-grid">
+            <div class="main-area">
+                <section class="case-section">
+                    <h2>Context</h2>
+                    <div class="context-cards" role="group" aria-label="Project context: overview, team, role">
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="#000" stroke-width="1.5"
+                                        fill="#fff" />
+                                    <path d="M7 8h10" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M7 12h10" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M7 16h6" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                                <h4>Overview</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Project:</strong> Internship project to build an <strong>AI-powered voice
+                                        assistant</strong>
+                                    tailored for TV interactions.</p>
+                                <p><strong>Goal:</strong> Provide natural voice navigation and search that feels
+                                    <strong>fast</strong>
+                                    and intuitive on TV devices.</p>
+                                <p><strong>Timeline:</strong> Internship period (3 months)</p>
+                            </div>
+                        </div>
+
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="3" stroke="#000" stroke-width="1.5" fill="#fff" />
+                                    <path d="M4 20v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <h4>Team</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>1 Senior Engineer</p>
+                                <p>3 Junior Engineers (Me)</p>
+                            </div>
+                        </div>
+
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M9.5 7.5L5 12l4.5 4.5" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                    <path d="M14.5 7.5L19 12l-4.5 4.5" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                </svg>
+                                <h4>My Role</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Platform & Integration:</strong> Implemented <strong>MCP (Model Context
+                                        Principle)</strong> servers and connected agent runtimes to manage model context
+                                    and tool routing.</p>
+                                <p><strong>Voice Recognition:</strong> Implemented <strong>Android voice
+                                        recognition</strong> frontend and integration with the assistant over a
+                                    <strong>low-latency</strong> channel.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="case-section">
+                    <h2>Problem</h2>
+                    <p><strong>TV remote experiences are clunky: voice is underutilized, responses can be slow or
+                            inconsistent, and <strong>personalization</strong> is limited.</strong></p>
+                    <p>Users expect fast, conversational responses to control playback, search for shows, or ask for
+                        recommendations. They also expect results tailored to their profile (watch history, preferences)
+                        and actions that integrate with device tools (play, enqueue, open apps). Typical voice flows—
+                        sending audio to a cloud endpoint or relying only on on-device models—either
+                        introduce unpredictable latency or lack the tooling and personalization needed for a rich TV
+                        assistant. To address that, we adopted an MCP (Model Context Principle) approach to manage model
+                        context: it enables secure session routing, controlled tool invocation (playback APIs,
+                        catalog queries, personalization stores), and edge-hosted agents that balance latency,
+                        privacy, and capability.</p>
+                </section>
+
+                <section class="case-section">
+                    <h2>Research</h2>
+                    <p>We performed a focused competitive analysis of
+                        leading voice systems (for example, <strong>Google Assistant</strong> and platform voice SDKs)
+                        and complemented
+                        that with small lab prototype sessions to validate <strong>latency</strong> and conversational
+                        expectations.
+                        Key insights from this combined analysis:</p>
+                    <ol>
+                        <li>Latency under ~500ms feels instant on TV; anything higher noticeably degrades trust.</li>
+                        <li>Users prefer short, conversational confirmations rather than long multi-sentence responses.
+                        </li>
+                        <li>Privacy matters: users want explicit affordances and the option to keep audio processing
+                            local where possible.</li>
+                    </ol>
+                    <p class="case-note">Competitive analysis and prototype findings led us to prioritize a hybrid
+                        architecture: <strong>local voice recognition</strong> for capture + <strong>MCP-hosted
+                            agents</strong> for language
+                        understanding, <strong>personalization</strong>, and tool use (playback APIs, app interactions,
+                        catalog
+                        queries, weather retrieval, travel search, web search, session memory, etc.). We also
+                        experimented with on-device LLMs (fine-tuned) to keep reasoning local, but latency and
+                        accuracy were problematic (~<strong>5s+</strong> end-to-end) and degraded the experience. The
+                        company preferred hosting its own model and edge servers for tighter control and
+                        personalization, which made MCP a natural fit.</p>
+                </section>
+
+                <section class="case-section">
+                    <h2>Idea</h2>
+                    <p>Create a <strong>low-latency</strong> assistant by pairing <strong>Android voice
+                            recognition</strong> (on-device capture and VAD)
+                        with <strong>MCP (Model Context Principle)</strong> servers that orchestrate agent runtimes and
+                        calls to the
+                        <strong>Anthropic API</strong> for reasoning and response generation. MCP-hosted agents maintain
+                        short-term model
+                        context and invoke tools (playback APIs, app interactions, catalog queries, weather
+                        retrieval, flight & hotel search, web search, personalization) on behalf of the device.
+                        We used <strong>streaming</strong> and message-level caching to reduce repeated latency and
+                        improve
+                        perceived speed. We briefly tested an on-device LLM path (with fine-tuning) but the
+                        combined latency/accuracy trade-offs led us back to MCP-hosted reasoning for production
+                        flows.
+                    </p>
+                </section>
+
+                <section class="case-section">
+                    <h2>Solution</h2>
+                    <h3>Technical Contributions</h3>
+                    <ol>
+                        <li><strong>MCP servers:</strong> Provisioned and configured MCP servers to host agent runtimes
+                            that handle conversation state, tool calls, and session routing.</li>
+                        <li><strong>Agent orchestration:</strong> Built a lightweight orchestrator to translate UI
+                            intents into Anthropic API prompts, manage short-term memory, and fallback heuristics.</li>
+                        <li><strong>Android voice path:</strong> Implemented voice capture using Android
+                            Speech/Recognition APIs with VAD, local transcription when available, and secure upload
+                            streams for cases where cloud NLU was needed. We also prototyped an on-device voice
+                            recognition pipeline but found the Android built-in SDK provided better accuracy and
+                            integration in the final product.</li>
+                        <li><strong>On-device LLM experiments:</strong> Built early fine-tuned on-device model
+                            prototypes to evaluate fully-local reasoning; measured end-to-end latency and accuracy
+                            (~5s+), which proved unsuitable for the TV experience.</li>
+                        <li><strong>Low-latency streaming:</strong> Adopted streaming for partial transcripts and
+                            incremental assistant responses to improve perceived speed.</li>
+                    </ol>
+
+                    <h3>UX & Product Highlights</h3>
+                    <ol>
+                        <li>Short, one-line confirmations for navigation commands; richer responses for searches with
+                            quick actions (play, enqueue, details).</li>
+                        <li>Visible mic state and history to improve user trust and discoverability.</li>
+                    </ol>
+                </section>
+
+                <!-- metrics moved to aside -->
+
+                <section class="case-section">
+                    <h2>Reflection</h2>
+                    <p>This internship taught me the importance of engineering for <strong>perceived
+                            performance</strong>:
+                        small changes ( <strong>partial streaming</strong>, faster confirmations, clear mic states)
+                        significantly improved usability. Working with <strong>MCP</strong> and managed agent runtimes
+                        clarified how to separate realtime capture from heavier reasoning tasks safely and scalably.
+                        Early on-device LLM experiments were invaluable: the on-device LLMs (even when fine-tuned)
+                        suffered from latency and accuracy issues (~<strong>5s+</strong>), and our custom voice pipeline
+                        underperformed compared to the <strong>Android built-in SDK</strong>—lessons that shaped the
+                        final architecture. I also learned valuable lessons about <strong>privacy controls</strong> and
+                        designing opt-in cloud features that respect users' expectations.</p>
+                    <p>If I continued this work, I would explore robust on-device LLM options for offline scenarios,
+                        add better <strong>personalization controls</strong>, and build a longer-term telemetry pipeline
+                        for production safety monitoring.</p>
+                </section>
+            </div>
+
+            <aside>
+                <div class="case-section" style="padding:0; margin:0;">
+                    <img class="case-image" style="padding:0; margin:0;" src="./images/tvagent.webp"
+                        alt="AI TV Assistant Reference Photo" loading="lazy">
+                </div>
+
+                <div class="case-section">
+                    <h3>Live demo</h3>
+                    <p>Internal demo only. No photos shown for privacy reasons.</p>
+                </div>
+
+                <div class="case-section" style="padding:0; margin:0;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Median end-to-end latency</td>
+                                <td>~350ms (streaming + cache)</td>
+                            </tr>
+                            <tr>
+                                <td>Task success (navigation/search)</td>
+                                <td>92%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
+        </div>
+    </div>
+</body>
+
+</html>

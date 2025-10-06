@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>MyMigraine — ML research</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <style>
+        /* Case study specific tweaks that follow the existing aesthetic */
+        body {
+            display: block;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .case-container {
+            width: min(92vw, 1000px);
+            margin: 40px auto;
+            padding: 24px;
+        }
+
+        #case-title {
+            font-size: clamp(36px, 6vw, 72px);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #case-title span {
+            color: white;
+            -webkit-text-stroke-width: 2px;
+            -webkit-text-stroke-color: black;
+        }
+
+        .case-meta {
+            text-align: center;
+            color: #444;
+            margin-bottom: 18px;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            align-items: start;
+            grid-template-areas: "aside" "main";
+        }
+
+        /* make left/right balanced and adaptive on wider screens */
+        @media (min-width: 800px) {
+            .case-grid {
+                grid-template-columns: 1fr minmax(300px, 420px);
+                gap: 32px;
+                grid-template-areas: "main aside";
+            }
+
+            .case-container {
+                width: min(92vw, 1100px);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .case-grid {
+                grid-template-columns: 1fr 420px;
+                gap: 36px;
+            }
+
+            .case-container {
+                width: min(92vw, 1200px);
+            }
+        }
+
+        .case-section {
+            background: #fff;
+            padding: 22px;
+            border: 2px solid #000;
+            margin-bottom: 14px;
+        }
+
+        /* spacing for headings and text for better vertical rhythm */
+        .case-section h2 {
+            margin: 0 0 12px 0;
+            font-size: clamp(18px, 2.8vw, 28px);
+        }
+
+        .case-section h3,
+        .case-section h4 {
+            margin: 0 0 10px 0;
+        }
+
+        .case-section p,
+        .case-section li,
+        .case-section ol,
+        .case-section ul {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        /* Restore list markers for case study lists (override global reset) */
+        /* Restore list markers for case study lists (override global reset) */
+        .case-section ol {
+            list-style: decimal outside;
+            list-style-type: decimal;
+            list-style-position: outside;
+            padding-left: 1.75rem;
+            margin-left: 0;
+        }
+
+        .case-section ul {
+            list-style: disc outside;
+            list-style-type: disc;
+            list-style-position: outside;
+            padding-left: 1.75rem;
+            margin-left: 0;
+        }
+
+        .case-section ol li,
+        .case-section ul li {
+            display: list-item;
+            margin-bottom: 10px;
+        }
+
+        /* marker styling (numbers/bullets) */
+        .case-section li::marker {
+            color: #000;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        /* Fallback using CSS counters so markers appear even if global reset hides them */
+        .case-section ol {
+            counter-reset: cs-counter;
+        }
+
+        .case-section ol li {
+            counter-increment: cs-counter;
+            position: relative;
+        }
+
+        .case-section ol li::before {
+            content: counter(cs-counter) ".";
+            position: absolute;
+            left: -1.5rem;
+            width: 1.25rem;
+            text-align: right;
+            color: #000;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .case-section ul li::before {
+            content: "•";
+            position: absolute;
+            left: -1.25rem;
+            width: 1rem;
+            text-align: center;
+            color: #000;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .case-section ol li,
+        .case-section ul li {
+            padding-left: 0.5rem;
+        }
+
+        /* Context 3-column inline layout */
+        /* Context cards layout (polished) */
+        .context-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 720px) {
+            .context-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .context-card {
+            background: #fff;
+            border: 1px solid #e6e0d8;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 720px) {
+            .context-card {
+                min-height: 160px;
+            }
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            flex: 0 0 auto;
+        }
+
+        .card-head h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .card-body p {
+            margin: 0 0 8px 0;
+        }
+
+        .muted {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .case-image {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        /* Research images side-by-side on wider screens; keep same height and avoid cropping */
+        .sidebyside-images {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .sidebyside-item {
+            width: 50%;
+            overflow: hidden;
+        }
+
+        .sidebyside-item .case-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        @media (max-width: 700px) {
+            .sidebyside-images {
+                flex-direction: column;
+            }
+
+            .sidebyside-item {
+                width: 100%;
+            }
+        }
+
+        .placeholder {
+            background: linear-gradient(135deg, #f6f0e9, #efe7dd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            font-weight: 700;
+        }
+
+        /* ensure aside content is spaced evenly and adapts */
+        .case-grid aside {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: stretch;
+            grid-area: aside;
+        }
+
+        .main-area {
+            grid-area: main;
+        }
+
+        /* keep aside visible at the top on large screens */
+        @media (min-width: 800px) {
+            .case-grid aside {
+                position: sticky;
+                top: 20px;
+            }
+        }
+
+        .case-grid aside .case-section {
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        @media(min-width:800px) {
+            .case-grid {
+                grid-template-columns: 1fr 320px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="case-container">
+        <a class="back-link" href="./index.html">← Back to portfolio</a>
+        <h1 id="case-title"><span>MyMigraine,</span> 2024</h1>
+        <p class="case-meta">Independent research with Duke University (advisor: Prof. Zbigniew Kabala) — Predictive
+            modeling of migraine occurrence & duration using Wolfram Mathematica</p>
+        <p class="case-meta"><em>Skills</em>: Wolfram Mathematica, data cleaning, feature engineering, classification
+            &amp;
+            regression, cross-validation, data visualization.</p>
+
+        <div class="case-grid">
+            <div class="main-area">
+                <section class="case-section">
+                    <h2>Context</h2>
+                    <!-- Research 3-card layout: Overview | Advisor | My Role -->
+                    <div class="context-cards" role="group" aria-label="Project context: overview, advisor, role">
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="#000" stroke-width="1.5"
+                                        fill="#fff" />
+                                    <path d="M7 8h10" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M7 12h10" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                                <h4>Overview</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Project:</strong> Independent research project on migraine prediction using
+                                    machine learning.</p>
+                                <p><strong>Goal:</strong> Build and evaluate predictive models to forecast migraine
+                                    occurrence and estimate attack duration.</p>
+                                <p><strong>Timeline:</strong> Independent study (self-directed)</p>
+                            </div>
+                        </div>
+
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="3" stroke="#000" stroke-width="1.5" fill="#fff" />
+                                    <path d="M4 20v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <h4>Advisor</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>Advisor: Prof. <strong>Zbigniew Kabala</strong> (Duke University)</p>
+                                <p>Collaboration: Independent researcher with periodic advisor feedback and review.</p>
+                            </div>
+                        </div>
+
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M9.5 7.5L5 12l4.5 4.5" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                    <path d="M14.5 7.5L19 12l-4.5 4.5" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                </svg>
+                                <h4>My Role</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Researcher:</strong> End-to-end workflow: data cleaning, feature engineering,
+                                    modeling, and evaluation using <strong>Wolfram Mathematica</strong>.</p>
+                                <p><strong>Deliverables:</strong> A <strong>10-page research article</strong> entitled
+                                    <em>"Predicting the Occurrence and the Duration of Migraine Attacks Using Machine
+                                        Learning"</em>, plus reproducible Mathematica notebooks.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="case-section">
+                    <h2>Problem</h2>
+                    <p>Migraine attacks are highly disruptive, but patients and clinicians currently have limited tools
+                        to anticipate onset or estimate duration. This project was personal: watching my mom
+                        <strong>suffer</strong> frequent attacks motivated me to explore practical forecasting
+                        approaches that could meaningfully improve daily management. Better <strong>short-term
+                            forecasts</strong> can improve symptom management, medication timing, and clinical
+                        decision-making.
+                    </p>
+                    <p>This research asked: can machine learning models trained on combined
+                        <strong>patient-reported</strong> and sensor-derived data provide reliable signals to predict
+                        whether a migraine will occur in the next 24 hours, and estimate how long an attack will last?
+                    </p>
+                </section>
+
+                <section class="case-section">
+                    <h2>Research</h2>
+                    <p>I performed a focused literature review and assembled a multi-source dataset composed of
+                        <strong>patient-reported diaries</strong> and auxiliary sensor-derived signals (where
+                        available). The research focused on three tasks: exploratory data analysis, feature engineering
+                        for temporal patterns, and building predictive models for both occurrence (classification) and
+                        duration (regression).
+                    </p>
+
+                    <h3>Data & preprocessing</h3>
+                    <ol>
+                        <li>Aggregated and harmonized heterogeneous data sources (self-reports, timestamped event logs,
+                            and basic sensor summaries).</li>
+                        <li><strong>Data cleaning</strong>: missing-value handling, outlier detection, timestamp
+                            alignment, and normalization using Mathematica's data pipelines.</li>
+                        <li>Feature engineering: derived temporal features (time-since-last-attack, circadian phase
+                            proxies), rolling-window statistics, and simple contextual covariates.</li>
+                    </ol>
+
+                    <h3>Modeling approach</h3>
+                    <ol>
+                        <li>Framed occurrence as a <strong>binary classification</strong> problem (will an attack occur
+                            in the next 24 hours?).</li>
+                        <li>Framed duration as a regression problem for predicted attack length conditioned on
+                            occurrence.</li>
+                        <li>Implemented baseline and tree-based models (logistic regression, decision-tree ensembles)
+                            using Mathematica's built-in functions, with k-fold cross-validation for robust evaluation.
+                        </li>
+                    </ol>
+
+                    <p class="case-note">All analyses and figures were produced reproducibly in Wolfram Mathematica
+                        notebooks; notebooks and the 10-page article document the pipeline, assumptions, and
+                        limitations.</p>
+                </section>
+
+                <!-- Idea section intentionally removed to focus on research and results -->
+
+                <section class="case-section">
+                    <h2>Results</h2>
+
+                    <p>The analyses produced a <strong>detectable predictive signal</strong> for short-term migraine
+                        occurrence and identified several temporally informative features. Cross-validated evaluation
+                        indicated that our models performed consistently better than simple baselines on the assembled
+                        dataset, while interpretability checks (feature importances and sensitivity analyses) surfaced
+                        clinically plausible covariates. All results were produced from reproducible Mathematica
+                        notebooks to ensure transparency and repeatability.</p>
+
+                    <h3>Key findings</h3>
+                    <ol>
+                        <li>Temporal features (lagged counts and rolling-window statistics) and simple circadian proxies
+                            were among the most informative predictors.</li>
+                        <li>Cross-validation and bootstrap resampling suggested the models generalize better than naive
+                            baselines, though additional data would strengthen confidence.</li>
+                        <li>Interpretability analyses helped prioritize features that are actionable for patient
+                            self-management and clinician review.</li>
+                    </ol>
+
+                    <h3>Artifacts</h3>
+                    <ol>
+                        <li><strong>10-page research article</strong>: "Predicting the Occurrence and the Duration of
+                            Migraine Attacks Using Machine Learning" (analysis, methods, figures).</li>
+                        <li><strong>Reproducible Mathematica notebooks</strong> containing data-cleaning scripts, model
+                            training code, and figure generation.</li>
+                    </ol>
+                </section>
+
+                <section class="case-section">
+                    <h2>Product & Impact</h2>
+                    <p>To make the research useful, I implemented a lightweight <strong>mobile app</strong> that runs
+                        the model on user inputs (hormonal, environmental, dietary, and self-reported triggers) and
+                        returns a short-term probability of an upcoming attack plus a duration estimate. The demo
+                        interface was used in as a DECA competition project to communicate the idea and show a working
+                        prototype.</p>
+
+                    <p>During the DECA competition I presented a live demo of the app and pitched the product narrative.
+                        The project received a <strong>DECA International — Excellence Award (top 15%)</strong> for the
+                        prototype and presentation. The app also records user entries to further personalize predictions
+                        and to collect additional labeled data for model refinement.</p>
+
+                    <p>Because the prototype was intended for demonstration and early user feedback, emphasis was placed
+                        on clear inputs, transparent output confidence, and privacy-conscious storage of user data
+                        (local-first with opt-in upload for model improvement).</p>
+                </section>
+
+                <section class="case-section">
+                    <h2>Reflection</h2>
+                    <p>This independent study reinforced the importance of clean, well-documented data pipelines and
+                        careful validation when working with health signals. Wolfram Mathematica proved effective for
+                        rapid exploratory analysis and reproducible figure generation, while cross-validation and
+                        resampling were critical to avoid overfitting on limited datasets. The work felt
+                        personal—designing models that could help someone like my <strong>mom</strong> shaped my
+                        emphasis on clarity and clinical usefulness.</p>
+                    <p>Key lessons: prioritize <strong>interpretability</strong> for clinical relevance, treat missing
+                        data thoughtfully, and collaborate with domain experts early to surface realistic covariates.
+                        Next steps would include expanding the dataset, incorporating richer sensor streams, and
+                        exploring time-series-specific models (e.g., sequence models) for improved short-term
+                        forecasting.</p>
+                </section>
+
+
+            </div>
+
+            <aside>
+                <div class="case-section" style="padding:0; margin:0;">
+                    <img class="case-image" style="padding:0; margin:0;" src="./images/MyMigraine.png"
+                        alt="MyMigraine cover" loading="lazy">
+                </div>
+
+                <div class="case-section" style="padding:0; margin:0;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Artifact</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Paper</td>
+                                <td>10 pages (analysis, methods, figures)</td>
+                            </tr>
+                            <tr>
+                                <td>Mobile App</td>
+                                <td>Cross-platform app built with React Native</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
+        </div>
+
+    </div>
+</body>
+
+</html>

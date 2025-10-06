@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,96 +9,151 @@
     <link rel="stylesheet" href="./css/normalize.css">
     <link rel="stylesheet" href="./css/index.css">
 </head>
-<body>
-    <div class="striped-background"></div>
-    <h1 id="name"><span>Alex</span> Wang</h1>
-    <p id="introduction">Cal Electrical Engineering & Computer Science Student, passionate about creating innovative solutions and making people’s lives better along the way.</p>
-    <div id="arrow-container">
-        <p>down here for the good stuff</p>
-        <img src="./images/arrow.png" alt="">
+
+<body class="css-transitions-only-after-page-load">
+    <div id="root">
+        <div class="striped-background"></div>
+        <h1 id="name"><span>Alex</span> Wang</h1>
+        <p id="introduction">Cal Electrical Engineering & Computer Science Student, passionate about creating innovative
+            solutions and making people’s lives better along the way.</p>
+        <div id="arrow-container">
+            <p>down here for the good stuff</p>
+            <img src="./images/arrow.png" alt="">
+        </div>
     </div>
-    <div id="project-container">        
-        <h2>Projects</h2>
+    <div id="project-container">
+        <h2>Case Studies</h2>
         <ul>
             <li>
-                <div class="image-container">
-                    <div class="text-overlay">🚧 Under Construction</div>
-                    <img src="./images/bentolicious.png" class="image2">
-                </div>
-                <p class="image-title">Contract work for a local taiwanese restaurant</p>
+                <a href="./bentolicious.html" aria-label="Open Bentolicious case study">
+                    <div class="image-container">
+                        <div class="text-overlay" aria-hidden="true">
+                            <div class="hover-content">
+                                <h3>Bentolicious</h3>
+                                <p class="hover-blurb">Pickup ordering redesign & low-fee checkout</p>
+                                <span class="hover-cta">View case study</span>
+                            </div>
+                        </div>
+                        <img src="./images/bentolicious.png" class="image2" alt="Bentolicious project screenshot"
+                            loading="lazy">
+                    </div>
+                </a>
+                <p class="image-title">Contract work - Local Taiwanese Restaurant</p>
+            </li>
+            <li>
+                <a href="./ai-tv-voice-assistant.html" aria-label="Open AI TV Voice Assistant case study">
+                    <div class="image-container">
+                        <div class="text-overlay" aria-hidden="true">
+                            <div class="hover-content">
+                                <h3>AI TV Voice Assistant</h3>
+                                <p class="hover-blurb">Voice-enabled assistant for connected TV — internship work</p>
+                                <span class="hover-cta">View case study</span>
+                            </div>
+                        </div>
+                        <img src="./images/tvagent.webp" class="image2" alt="AI TV project screenshot" loading="lazy">
+                    </div>
+                </a>
+                <p class="image-title">Internship - AI TV Voice Assistant Agent</p>
+            </li>
+            <li>
+                <a href="./mymigraine.html" aria-label="Open MyMigraine case study">
+                    <div class="image-container">
+                        <div class="text-overlay" aria-hidden="true">
+                            <div class="hover-content">
+                                <h3>MyMigraine</h3>
+                                <p class="hover-blurb">Machine Learning / migraine research</p>
+                                <span class="hover-cta">View case study</span>
+                            </div>
+                        </div>
+                        <img src="./images/MyMigraine.png" class="image2" alt="MyMigraine project screenshot"
+                            loading="lazy">
+                    </div>
+                </a>
+                <p class="image-title">Research - ML Migraine Prediction Research</p>
+            </li>
+            <li>
+                <a href="./situation-room.html" aria-label="Open Situation Room case study">
+                    <div class="image-container">
+                        <div class="text-overlay" aria-hidden="true">
+                            <div class="hover-content">
+                                <h3>Situation Room</h3>
+                                <p class="hover-blurb">Anonymous Chatroom for early stage Activists & Journalists</p>
+                                <span class="hover-cta">View case study</span>
+                            </div>
+                        </div>
+                        <img src="./images/situation-room-title.jpg" class="image2" alt="Situation Room project screenshot"
+                            loading="lazy">
+                    </div>
+                </a>
+                <p class="image-title"> Project - Anonymous Chatroom for Activists and Journalists </p>
             </li>
             <li>
                 <div class="image-container">
-                    <div class="text-overlay">🚧 Under Construction</div>
-                    <img src="./images/Vetements.png" class="image2">
+                    <div class="text-overlay" aria-hidden="true">
+                        <div class="hover-content">
+                            <h3>MobileCybench</h3>
+                            <p class="hover-blurb">Developing AI Agents to detect vulnerabilities in Android mobile software</p>
+                            <span class="hover-cta">Coming soon</span>
+                        </div>
+                    </div>
+                    <img src="./images/cybench.png" class="image2" alt="Cybench project screenshot" loading="lazy">
                 </div>
-                <p class="image-title">An online personal closet</p>
+                <p class="image-title"> Research - Vulnerabilities Detection with Al Agents </p>
             </li>
-            <li>
+             <li>
                 <div class="image-container">
-                    <div class="text-overlay">🚧 Under Construction</div>
-                    <img src="./images/MyMigraine.png" class="image2">
+                    <div class="text-overlay" aria-hidden="true">
+                        <div class="hover-content">
+                            <h3>Mobius</h3>
+                            <p class="hover-blurb">Korean Edu Tech startup work</p>
+                            <span class="hover-cta">Coming soon</span>
+                        </div>
+                    </div>
+                    <img src="./images/mobius.png" class="image2" alt="Mobius project screenshot" loading="lazy">
                 </div>
-                <p class="image-title">A mobile app that predicts migraine attacks</p>
-            </li>   
-            <li>
-                <div class="image-container">
-                    <div class="text-overlay">🚧 Under Construction</div>
-                    <img src="./images/mobius.png" class="image2">
-                </div>
-                <p class="image-title">Contract work for a korean edu-tech company</p>
+                <p class="image-title"> Contract Work - Korean Edu Tech Startup </p>
             </li>
-            <!-- <li>
-                <div class="image-container">
-                    <div class="text-overlay">🚧 Under Construction</div>
-                    <img src="./images/EZSleep.png" class="image2">
-                </div>
-                <p class="image-title">A mobile app built around circadian rhythm</p>
-            </li> -->
-            <!-- <li>
-                <div class="image-container">
-                    <div class="text-overlay">🚧 Under Construction</div>
-                    <img src="./images/HabitTracker.png" class="image2">
-                </div>
-                <p class="image-title">A website to track daily habits</p>
-            </li> -->
         </ul>
     </div>
-    <footer>
-        <div class="links-container">
-          <h3 id="contactMe">HIT ME UP:</h3>
-          <div class="social-links">
-            <!-- Instagram -->
-            <a href="https://www.instagram.com/alecs_wang/" class="social-icon">
-              <img src="./images/instagramLogoBlack.png" alt="Instagram" class="black-version">
-              <img src="./images/instagramLogoColor.png" alt="Instagram" class="color-version">
-            </a>
-            
-            <!-- GitHub -->
-            <a href="https://github.com/alecswang" class="social-icon">
-              <img src="./images/githubLogoBlack.png" alt="GitHub" class="black-version">
-              <img src="./images/githubLogoColor.png" alt="GitHub" class="color-version">
-            </a>
-            
-            <!-- LinkedIn -->
-            <a href="https://www.linkedin.com/in/alex-wang-967276262/" class="social-icon">
-              <img src="./images/linkedinLogoBlack.png" alt="LinkedIn" class="black-version">
-              <img src="./images/linkedinLogoColor.png" alt="LinkedIn" class="color-version">
-            </a>
-          </div>
-        </div>
-        
-        <div id="skills-container">
-          <h3 id="skills">Unmentioned Skills:</h3>
-          <p>
-            Setting food on fire: Intermediate <br/>
-            Carrying watermelon up hikes: Expert <br/>
-            Going all in with seven deuce: Expert <br/>
-            Failed e-commerce attempts: 3
-          </p>
-        </div>
-      </footer>
+    <div id="footer-wrapper">
+        <footer>
+            <div class="links-container">
+                <h3 id="contactMe">HIT ME UP:</h3>
+                <div class="social-links">
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/alecs_wang/" class="social-icon" aria-label="Instagram">
+                        <img src="./images/instagramLogoBlack.png" alt="Instagram black" class="black-version">
+                        <img src="./images/instagramLogoColor.png" alt="Instagram color" class="color-version">
+                    </a>
+
+                    <!-- GitHub -->
+                    <a href="https://github.com/alecswang" class="social-icon" aria-label="GitHub">
+                        <img src="./images/githubLogoBlack.png" alt="GitHub black" class="black-version">
+                        <img src="./images/githubLogoColor.png" alt="GitHub color" class="color-version">
+                    </a>
+
+                    <!-- LinkedIn -->
+                    <a href="https://www.linkedin.com/in/alex-wang-967276262/" class="social-icon"
+                        aria-label="LinkedIn">
+                        <img src="./images/linkedinLogoBlack.png" alt="LinkedIn black" class="black-version">
+                        <img src="./images/linkedinLogoColor.png" alt="LinkedIn color" class="color-version">
+                    </a>
+                </div>
+            </div>
+
+            <div id="skills-container">
+                <h3 id="skills">Unmentioned Skills:</h3>
+                <p>
+                    Setting food on fire: Intermediate <br />
+                    Carrying watermelon up hikes: Expert <br />
+                    Going all in with seven deuce: Expert <br />
+                    Failed e-commerce attempts: 3
+                </p>
+            </div>
+        </footer>
+    </div>
 
 </body>
 <script src="./js/index.js"></script>
+
 </html>

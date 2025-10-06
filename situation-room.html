@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Bentolicious — Case Study</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <style>
+        /* Case study specific tweaks that follow the existing aesthetic */
+        body {
+            display: block;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .case-container {
+            width: min(92vw, 1000px);
+            margin: 40px auto;
+            padding: 24px;
+        }
+
+        #case-title {
+            font-size: clamp(36px, 6vw, 72px);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #case-title span {
+            color: white;
+            -webkit-text-stroke-width: 2px;
+            -webkit-text-stroke-color: black;
+        }
+
+        .case-meta {
+            text-align: center;
+            color: #444;
+            margin-bottom: 18px;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            align-items: start;
+            grid-template-areas: "aside" "main";
+        }
+
+        /* make left/right balanced and adaptive on wider screens */
+        @media (min-width: 800px) {
+            .case-grid {
+                grid-template-columns: 1fr minmax(300px, 420px);
+                gap: 32px;
+                grid-template-areas: "main aside";
+            }
+
+            .case-container {
+                width: min(92vw, 1100px);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .case-grid {
+                grid-template-columns: 1fr 420px;
+                gap: 36px;
+            }
+
+            .case-container {
+                width: min(92vw, 1200px);
+            }
+        }
+
+        .case-section {
+            background: #fff;
+            padding: 22px;
+            border: 2px solid #000;
+            margin-bottom: 14px;
+        }
+
+        /* spacing for headings and text for better vertical rhythm */
+        .case-section h2 {
+            margin: 0 0 12px 0;
+            font-size: clamp(18px, 2.8vw, 28px);
+        }
+
+        .case-section h3,
+        .case-section h4 {
+            margin: 0 0 10px 0;
+        }
+
+        .case-section p,
+        .case-section li,
+        .case-section ol,
+        .case-section ul {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        /* Restore list markers for case study lists (override global reset) */
+        /* Restore list markers for case study lists (override global reset) */
+        .case-section ol {
+            list-style: decimal outside;
+            list-style-type: decimal;
+            list-style-position: outside;
+            padding-left: 1.75rem;
+            margin-left: 0;
+        }
+
+        .case-section ul {
+            list-style: disc outside;
+            list-style-type: disc;
+            list-style-position: outside;
+            padding-left: 1.75rem;
+            margin-left: 0;
+        }
+
+        .case-section ol li,
+        .case-section ul li {
+            display: list-item;
+            margin-bottom: 10px;
+        }
+
+        /* marker styling (numbers/bullets) */
+        .case-section li::marker {
+            color: #000;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        /* Fallback using CSS counters so markers appear even if global reset hides them */
+        .case-section ol {
+            counter-reset: cs-counter;
+        }
+
+        .case-section ol li {
+            counter-increment: cs-counter;
+            position: relative;
+        }
+
+        .case-section ol li::before {
+            content: counter(cs-counter) ".";
+            position: absolute;
+            left: -1.5rem;
+            width: 1.25rem;
+            text-align: right;
+            color: #000;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .case-section ul li::before {
+            content: "•";
+            position: absolute;
+            left: -1.25rem;
+            width: 1rem;
+            text-align: center;
+            color: #000;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .case-section ol li,
+        .case-section ul li {
+            padding-left: 0.5rem;
+        }
+
+        /* Context 3-column inline layout */
+        /* Context cards layout (polished) */
+        .context-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 720px) {
+            .context-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .context-card {
+            background: #fff;
+            border: 1px solid #e6e0d8;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 720px) {
+            .context-card {
+                min-height: 160px;
+            }
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            flex: 0 0 auto;
+        }
+
+        .card-head h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .card-body p {
+            margin: 0 0 8px 0;
+        }
+
+        .muted {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .case-image {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        /* Research images side-by-side on wider screens; keep same height and avoid cropping */
+        .sidebyside-images {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .sidebyside-item {
+            width: 50%;
+            overflow: hidden;
+        }
+
+        .sidebyside-item .case-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        @media (max-width: 700px) {
+            .sidebyside-images {
+                flex-direction: column;
+            }
+
+            .sidebyside-item {
+                width: 100%;
+            }
+        }
+
+        .placeholder {
+            background: linear-gradient(135deg, #f6f0e9, #efe7dd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            font-weight: 700;
+        }
+
+        /* ensure aside content is spaced evenly and adapts */
+        .case-grid aside {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: stretch;
+            grid-area: aside;
+        }
+
+        .main-area {
+            grid-area: main;
+        }
+
+        /* keep aside visible at the top on large screens */
+        @media (min-width: 800px) {
+            .case-grid aside {
+                position: sticky;
+                top: 20px;
+            }
+        }
+
+        .case-grid aside .case-section {
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        @media(min-width:800px) {
+            .case-grid {
+                grid-template-columns: 1fr 320px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="case-container">
+        <a class="back-link" href="./index.html">← Back to portfolio</a>
+        <h1 id="case-title"><span>Situation Room,</span> 2025</h1>
+        <p class="case-meta">Project: End-to-end anonymous chatroom for activists and journalists — threat-aware design,
+            end-to-end privacy, and resilience under censorship.</p>
+        <p class="case-meta"><em>Skills:</em> Threat modeling, WebRTC, end-to-end encryption, secure UX, privacy
+            engineering.</p>
+        <div class="case-grid">
+            <div class="main-area">
+                <section class="case-section">
+                    <h2>Context</h2>
+                    <!-- Polished 3-card layout: Overview | Team | My Role -->
+                    <div class="context-cards" role="group" aria-label="Project context: overview, team, role">
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <!-- Document icon: rectangle with text lines -->
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="#000" stroke-width="1.5"
+                                        fill="#fff" />
+                                    <path d="M7 8h10" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M7 12h10" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M7 16h6" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                                <h4>Overview</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Project:</strong> Situation Room — an anonymous, threat-aware web chat
+                                    platform designed for activists and independent journalists.</p>
+                                <p><strong>Goal:</strong> Provide resilient, low-metadata real-time communication that
+                                    balances practical anonymity with usable collaboration under censorship and
+                                    surveillance.</p>
+                                <p><strong>Timeline:</strong> Jan 2025 – May 2025</p>
+                            </div>
+                        </div>
+
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="3" stroke="#000" stroke-width="1.5" fill="#fff" />
+                                    <path d="M4 20v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <h4>Team</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>1 Journalist</p>
+                                <p>1 Activist</p>
+                                <p>1 Developer (Me)</p>
+                                <p>1 Data Scientist</p>
+                            </div>
+                        </div>
+
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M9.5 7.5L5 12l4.5 4.5" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                    <path d="M14.5 7.5L19 12l-4.5 4.5" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                </svg>
+                                <h4>My Role</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Role:</strong> Lead UX &amp; Privacy Engineer — product-focused engineer on a
+                                    cross-functional team.</p>
+                                <p><strong>Responsibilities:</strong> Threat modeling, secure UX design, prototype
+                                    implementation, and coordinating
+                                    pilot sessions and interviews.</p>
+                                <p><strong>Deliverables:</strong> Working prototype, onboarding flow, threat model, and
+                                    pilot findings to guide future deployment.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="case-section">
+                    <h2>Problem</h2>
+                    <p><strong>Vulnerable communication channels endanger sources and journalists.</strong></p>
+                    <p>Many activists and journalists operate in environments where surveillance, censorship, and legal
+                        risk
+                        are real. Existing chat platforms either expose metadata, lack strong anonymity guarantees, or
+                        depend on trusted infrastructure that can be blocked or seized. The challenge: build a usable
+                        conversation space that minimizes identifying traces, resists censorship, and still supports
+                        real-time collaboration.</p>
+                </section>
+
+                <section class="case-section">
+                    <h2>Research</h2>
+                    <p>According to a targeted survey during research, more than <strong>50%</strong> of respondents
+                        reported that government surveillance and the fear of being identified were the biggest
+                        challenges they faced as activists. Respondents prioritized features that reduce exposure while
+                        enabling coordination:</p>
+                    <ol>
+                        <li>Anonymous posting (remove persistent identifiers from public messages)</li>
+                        <li>Secure, invite-only private groups for trusted collaboration</li>
+                        <li>Event coordination tools (time/place coordination with minimized metadata)</li>
+                    </ol>
+                    <div class="sidebyside-images">
+                        <div class="sidebyside-item"><img class="case-image" src="./images/situation-room-survey1.png"
+                                alt="Situation Room Survey" loading="lazy"></div>
+                        <div class="sidebyside-item"><img class="case-image" src="./images/situation-room-survey2.png"
+                                alt="Situation Room Survey" loading="lazy"></div>
+                    </div>
+                </section>
+
+                <!-- Idea removed; focusing on research and results -->
+
+                <section class="case-section">
+                    <h2>Results</h2>
+
+                    <p>Guided by threat modeling and the survey findings (where &gt;50% of respondents named government
+                        surveillance and fear of identification as the primary concern), we prioritized
+                        <strong>anonymous
+                            posting</strong> and <strong>secure invite-only groups</strong>. The prototype implemented
+                        lightweight mechanisms for <strong>anonymous posting</strong> and <strong>invite-only
+                            groups</strong>
+                        to minimise centralised traces.
+                    </p>
+
+                    <h3>Key outcomes</h3>
+                    <ol>
+                        <li><strong>Anonymous posting:</strong> messages can be published without persistent
+                            identifiers; server logs are
+                            minimized and retention windows are short by design.</li>
+                        <li><strong>Secure private groups:</strong> groups with client-side key handling reduced group
+                            metadata exposure while keeping membership manageable for small teams.</li>
+                    </ol>
+
+                    <h3>Pilot findings</h3>
+                    <ol>
+                        <li><strong>Mean pilot trust score:</strong> <strong>4.2 / 5</strong> — participants reported
+                            higher perceived
+                            privacy when shown the privacy affordances.</li>
+                        <li><strong>Onboarding success:</strong> <strong>92%</strong> — most testers completed setup in
+                            the pilot with the
+                            simplified onboarding flow.</li>
+                        <li><strong>Feature preference:</strong> testers repeatedly cited <strong>anonymous
+                                posting</strong> and
+                            <strong>private groups</strong> as the most valuable features during follow-up interviews.
+                        </li>
+                    </ol>
+                    <img class="case-image" src="./images/situation-room.png" alt="Lighthouse performance report"
+                        loading="lazy">
+                </section>
+
+                <section class="case-section">
+                    <h2>Product & Impact</h2>
+                    <p>The end result is a lightweight web prototype that demonstrates practical <strong>privacy
+                            affordances</strong>
+                        aligned to users' stated needs. The demo currently implements <strong>anonymous posting</strong>
+                        and <strong>invite-only
+                            private groups</strong>.</p>
+
+                    <p>Impact from pilots and interviews: pilot participants reported increased willingness to share
+                        sensitive updates in the prototype compared with standard platforms, and prioritized the
+                        private-group workflow for ongoing collaboration. These findings indicate the implemented
+                        features can raise practical safety for small work groups and newsrooms when paired with
+                        careful deployment and training. The project was developed as part of ENG C183F at UC Berkeley
+                        and received the class <strong>Social Impact</strong> award for its focus on protective design
+                        for high-risk users.</p>
+
+                    <p>Deliverables included: the working prototype demo (anonymous posting &amp; private groups), the
+                        threat model and design notes, and a short onboarding guide produced for pilot participants.</p>
+
+                    <img class="case-image" src="./images/situation-room-award.jpg" alt="Lighthouse performance report"
+                        loading="lazy">
+                </section>
+
+                <section class="case-section">
+                    <h2>Reflection</h2>
+                    <p>The research reinforced a recurring lesson: <strong>privacy features must be obvious and
+                            usable</strong> to be
+                        protective. Strong technical guarantees are only effective when paired with clear onboarding and
+                        honest descriptions of threat limitations. Simplifying the setup increased adoption in our
+                        pilots, but also surfaced edge cases where more robust <strong>key management</strong> and
+                        <strong>defence-in-depth</strong> are
+                        necessary.
+                    </p>
+
+                    <p>Trade-offs & next steps: prioritise stronger client-side key management, implement and test the
+                        designed event coordination and resilient transport approaches (e.g., WebRTC + relay meshes),
+                        and explore distributed relay architectures to reduce central points of failure. Future pilots
+                        should measure real-world adversary scenarios and expand participant diversity to validate the
+                        design under pressure.</p>
+
+                    <p>Thanks team!!!</p>
+                </section>
+
+
+            </div>
+
+            <aside>
+                <div class="case-section" style="padding:0; margin:0;">
+                    <img class="case-image" style="padding:0; margin:0;" src="./images/situation-room-title.jpg"
+                        alt="Situation Room cover" loading="lazy">
+                </div>
+
+                <div class="case-section">
+                    <h3>Live Demo</h3>
+                    <p><a href="https://www.situation-room.org" target="_blank"
+                            rel="noopener">https://www.situation-room.org</a></p>
+                </div>
+
+                <div class="case-section" style="padding:0; margin:0;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mean Pilot Trust Score</td>
+                                <td>4.2 / 5</td>
+                            </tr>
+                            <tr>
+                                <td>Onboarding success</td>
+                                <td>92% (pilot participants able to complete setup)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
+        </div>
+
+    </div>
+</body>
+
+</html>

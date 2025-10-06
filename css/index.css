@@ -5,11 +5,28 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* ensure 100vh calculations are consistent */
+html, body { height: 100%; }
+
 /* ========== TYPOGRAPHY ========== */
+#root {
+  width: 100%;
+  /* make hero exactly viewport height so following content is off-screen */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 36px);
+  overflow: hidden; /* never reveal below-the-fold content */
+}
+
 #name {
-  font-size: 128px;
-  margin-top: 30vh;
-  margin-bottom: 30px;
+  /* fluid scale: clamps keep the look across sizes */
+  font-size: clamp(48px, 8vw, 128px);
+  margin-top: clamp(30vh, 20vh, 30vh);
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 #name span {
@@ -19,31 +36,35 @@ body {
 }
 
 #introduction {
-  width: 70vw;
-  font-size: 24px;
+  width: min(86vw, 1000px);
+  font-size: clamp(16px, 2.2vw, 24px);
   text-align: center;
-  line-height: 40px;
-  padding-bottom: 160px;
+  line-height: clamp(1.3rem, 2.4vw, 2.5rem);
+  padding-bottom: clamp(80px, 12vw, 160px);
+  margin: 0 auto;
 }
 
 #project-container h2 {
-  font-size: 68px;
-  padding-bottom: 50px;
+  font-size: clamp(28px, 5.5vw, 68px);
+  padding-bottom: clamp(24px, 4vw, 50px);
+  text-align: center;
 }
 
 .image-title {
-  font-size: 24px;
+  font-size: clamp(14px, 1.6vw, 24px);
   margin-top: 10px;
+  text-align: center;
 }
 
 .text-overlay {
-  font-size: 48px;
+  font-size: clamp(20px, 4vw, 48px);
   font-weight: bold;
   color: black;
+  text-align: center;
 }
 
 #contactMe, #skills {
-  font-size: 30px;
+  font-size: clamp(18px, 2.2vw, 30px);
 }
 
 #skills{
@@ -51,68 +72,77 @@ body {
 }
 
 #arrow-container p {
-  font-size: 18px;
-  padding-bottom: 20px;
+  font-size: clamp(12px, 1.6vw, 18px);
+  padding-bottom: 12px;
+  /* force single line */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ========== LAYOUT ========== */
 #project-container {
-  width: 75vw;
+  width: min(92vw, 1200px);
 }
 
 #project-container ul {
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(12px, 2vw, 36px);
+  align-items: start;
 }
 
 #project-container li {
-  width: 48%;
-  height: 25vw;
-  margin-bottom: 3vw;
+  width: 100%;
   position: relative;
 }
 
 .image-container {
   position: relative;
   width: 100%;
-  height: 23vw;
+  /* use aspect-ratio to keep consistent tile shapes */
+  aspect-ratio: 14 / 9;
   border: 2px black solid;
+  overflow: hidden;
 }
 
 .text-overlay {
-  position: relative;
-  float: left;
-  top: 50%;
-  left: 50%;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
   opacity: 0;
-  transform: translate(-50%, -50%);  
+  background: rgba(255,255,255,0.6);
 }
 
 #arrow-container {
   display: grid;
   place-items: center;
-  width: 20vw;
+  width: min(240px, 20vw);
+  margin: 0 auto;
 }
 
 #arrow-container img {
-  padding-bottom: 140px;
+  padding-bottom: clamp(40px, 12vw, 140px);
 }
 
-footer {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  width: 60%;
-  padding: 80px 0;
+#footer-wrapper {
+  width: min(92vw, 1200px);
   margin: 0 auto;
 }
-footer div {
-  margin: 0 auto;
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  padding: clamp(40px, 6vw, 80px) 0;
+  gap: 20px;
+}
+footer > div {
   display: grid;
   place-items: center;
-  flex: 1;
+  flex: 1 1 0;
 }
 
 #links {
@@ -125,7 +155,7 @@ footer div {
 }
 
 #skills-container {
-  width: 500px;
+  width: min(500px, 40%);
   flex: 1;
   min-width: 0;
 }
@@ -142,13 +172,26 @@ footer div {
   transition: opacity 0.3s ease-in-out;
 }
 
-.image-container:hover .text-overlay {
-  opacity: 1;
+/* enhanced hover: dim image slightly and show a dark overlay with title + blurb + CTA */
+.image-container { --overlay-bg: rgba(0,0,0,0.95); }
+.image-container .text-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(var(--overlay-bg), var(--overlay-bg));
+  opacity: 0;
+  transition: opacity 220ms ease;
 }
 
-.image-container:hover .image2 {
-  opacity: 0;
-}
+.image-container .hover-content { color: #fff; text-align: center; transform: translateY(6px); transition: transform 220ms ease; padding: 12px; }
+.image-container .hover-content h3 { margin: 0; font-size: clamp(16px, 2.5vw, 22px); font-weight: 800; }
+.image-container .hover-content .hover-blurb { margin: 6px 0 0 0; font-size: clamp(12px, 1.8vw, 14px); opacity: 0.95; }
+.image-container .hover-content .hover-cta { display: inline-block; margin-top: 10px; padding: 8px 12px; border: 1px solid #fff; border-radius: 6px; font-weight:700; background: transparent; }
+
+.image-container:hover .text-overlay { opacity: 1; }
+.image-container:hover .hover-content { transform: none; }
+.image-container:hover .image2 { opacity: 0.3; transform: scale(1.03); transition: opacity 220ms ease, transform 260ms ease; }
 
 /* ========== SOCIAL ICONS ========== */
 .social-links {
@@ -194,16 +237,28 @@ footer div {
 
 /* Specific icon adjustments */
 #instagram .black-version,
-#instagram .color-version {
-  width: 40px;
+#instagram .color-version { width: 40px; }
+#linkedin .black-version { width: 32px; }
+#github .black-version { width: 32px; }
+
+/* make icons scale on small screens */
+.social-icon { width: clamp(28px, 5vw, 48px); height: clamp(28px, 5vw, 48px); }
+.social-icon img { width: 100%; height: 100%; }
+
+/* ========== RESPONSIVE BREAKPOINTS ========== */
+@media (max-width: 900px) {
+  #project-container ul { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 24px; align-items: center; }
+  #skills-container { width: 100%; }
 }
 
-#linkedin .black-version {
-  width: 32px;
+@media (prefers-reduced-motion: reduce) {
+  .image2, .social-icon, .social-icon img { transition: none !important; }
 }
 
-#github .black-version {
-  width: 32px;
+@media (prefers-reduced-motion: reduce) {
+  .image-container .image2 { transform: none !important; }
+  .image-container .text-overlay { transition: none !important; }
 }
 
 /* ========== UTILITIES ========== */

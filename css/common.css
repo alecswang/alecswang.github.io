@@ -36,3 +36,17 @@ body {
     overflow-y: overlay;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
  }
+
+/* Responsive helper rules */
+html {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+*, *:before, *:after { box-sizing: inherit; }
+
+/* Make images scale nicely */
+/* img { max-width: 100%; height: auto; display: block; } */
+
+/* Allow vertical scrollbar without layout shift on small screens */
+body { -webkit-overflow-scrolling: touch; }

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Bentolicious — Case Study</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/normalize.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <style>
+        /* Case study specific tweaks that follow the existing aesthetic */
+        body {
+            display: block;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .case-container {
+            width: min(92vw, 1000px);
+            margin: 40px auto;
+            padding: 24px;
+        }
+
+        #case-title {
+            font-size: clamp(36px, 6vw, 72px);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #case-title span {
+            color: white;
+            -webkit-text-stroke-width: 2px;
+            -webkit-text-stroke-color: black;
+        }
+
+        .case-meta {
+            text-align: center;
+            color: #444;
+            margin-bottom: 18px;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            align-items: start;
+            grid-template-areas: "aside" "main";
+        }
+
+        /* make left/right balanced and adaptive on wider screens */
+        @media (min-width: 800px) {
+            .case-grid {
+                grid-template-columns: 1fr minmax(300px, 420px);
+                gap: 32px;
+                grid-template-areas: "main aside";
+            }
+
+            .case-container {
+                width: min(92vw, 1100px);
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .case-grid {
+                grid-template-columns: 1fr 420px;
+                gap: 36px;
+            }
+
+            .case-container {
+                width: min(92vw, 1200px);
+            }
+        }
+
+        .case-section {
+            background: #fff;
+            padding: 22px;
+            border: 2px solid #000;
+            margin-bottom: 14px;
+        }
+
+        /* spacing for headings and text for better vertical rhythm */
+        .case-section h2 {
+            margin: 0 0 12px 0;
+            font-size: clamp(18px, 2.8vw, 28px);
+        }
+
+        .case-section h3,
+        .case-section h4 {
+            margin: 0 0 10px 0;
+        }
+
+        .case-section p,
+        .case-section li,
+        .case-section ol,
+        .case-section ul {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        /* Restore list markers for case study lists (override global reset) */
+        /* Restore list markers for case study lists (override global reset) */
+        .case-section ol {
+            list-style: decimal outside;
+            list-style-type: decimal;
+            list-style-position: outside;
+            padding-left: 1.75rem;
+            margin-left: 0;
+        }
+
+        .case-section ul {
+            list-style: disc outside;
+            list-style-type: disc;
+            list-style-position: outside;
+            padding-left: 1.75rem;
+            margin-left: 0;
+        }
+
+        .case-section ol li,
+        .case-section ul li {
+            display: list-item;
+            margin-bottom: 10px;
+        }
+
+        /* marker styling (numbers/bullets) */
+        .case-section li::marker {
+            color: #000;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        /* Fallback using CSS counters so markers appear even if global reset hides them */
+        .case-section ol {
+            counter-reset: cs-counter;
+        }
+
+        .case-section ol li {
+            counter-increment: cs-counter;
+            position: relative;
+        }
+
+        .case-section ol li::before {
+            content: counter(cs-counter) ".";
+            position: absolute;
+            left: -1.5rem;
+            width: 1.25rem;
+            text-align: right;
+            color: #000;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .case-section ul li::before {
+            content: "•";
+            position: absolute;
+            left: -1.25rem;
+            width: 1rem;
+            text-align: center;
+            color: #000;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .case-section ol li,
+        .case-section ul li {
+            padding-left: 0.5rem;
+        }
+
+        /* Context 3-column inline layout */
+        /* Context cards layout (polished) */
+        .context-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 720px) {
+            .context-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .context-card {
+            background: #fff;
+            border: 1px solid #e6e0d8;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 720px) {
+            .context-card {
+                min-height: 160px;
+            }
+        }
+
+        .card-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-icon {
+            flex: 0 0 auto;
+        }
+
+        .card-head h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .card-body p {
+            margin: 0 0 8px 0;
+        }
+
+        .muted {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .case-image {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            margin-bottom: 12px;
+        }
+
+        /* Research images side-by-side on wider screens; keep same height and avoid cropping */
+        .sidebyside-images {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .sidebyside-item {
+            width: 50%;
+            overflow: hidden;
+        }
+
+        .sidebyside-item .case-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        @media (max-width: 700px) {
+            .sidebyside-images {
+                flex-direction: column;
+            }
+
+            .sidebyside-item {
+                width: 100%;
+            }
+        }
+
+        .placeholder {
+            background: linear-gradient(135deg, #f6f0e9, #efe7dd);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            font-weight: 700;
+        }
+
+        /* ensure aside content is spaced evenly and adapts */
+        .case-grid aside {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: stretch;
+            grid-area: aside;
+        }
+
+        .main-area {
+            grid-area: main;
+        }
+
+        /* keep aside visible at the top on large screens */
+        @media (min-width: 800px) {
+            .case-grid aside {
+                position: sticky;
+                top: 20px;
+            }
+        }
+
+        .case-grid aside .case-section {
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        @media(min-width:800px) {
+            .case-grid {
+                grid-template-columns: 1fr 320px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="case-container">
+        <a class="back-link" href="./index.html">← Back to portfolio</a>
+        <h1 id="case-title"><span>Bentolicious,</span> 2025</h1>
+        <p class="case-meta">Contract work through UX@Berkeley — Responsive redesign & pickup ordering</p>
+        <p class="case-meta"><em>Skills:</em> Next.js, Tailwind CSS, Paypal API, Firebase, WebSocket, Figma.</p>
+        <div class="case-grid">
+            <div class="main-area">
+                <section class="case-section">
+                    <h2>Context</h2>
+                    <!-- Polished 3-card layout: Overview | Team | My Role -->
+                    <div class="context-cards" role="group" aria-label="Project context: overview, team, role">
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <!-- Document icon: rectangle with text lines -->
+                                    <rect x="3" y="3" width="18" height="18" rx="2" stroke="#000" stroke-width="1.5"
+                                        fill="#fff" />
+                                    <path d="M7 8h10" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M7 12h10" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                    <path d="M7 16h6" stroke="#000" stroke-width="1.5" stroke-linecap="round" />
+                                </svg>
+                                <h4>Overview</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Project:</strong> Contract work through UX@Berkeley for a local bento shop.
+                                </p>
+                                <p><strong>Goal:</strong> Redesign the website to improve usability and add a direct
+                                    pickup-ordering system.</p>
+                                <p><strong>Timeline:</strong> March 2025 – June 2025</p>
+                            </div>
+                        </div>
+
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <circle cx="12" cy="8" r="3" stroke="#000" stroke-width="1.5" fill="#fff" />
+                                    <path d="M4 20v-1a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v1" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <h4>Team</h4>
+                            </div>
+                            <div class="card-body">
+                                <p>1 Project Manager</p>
+                                <p>3 UX Designers</p>
+                                <p>2 UX Engineers (Me)</p>
+                            </div>
+                        </div>
+
+                        <div class="context-card">
+                            <div class="card-head">
+                                <svg class="card-icon" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path d="M9.5 7.5L5 12l4.5 4.5" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                    <path d="M14.5 7.5L19 12l-4.5 4.5" stroke="#000" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                                </svg>
+                                <h4>My Role</h4>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>UX Engineering:</strong> Improved visual hierarchy, readability, and menu
+                                    structure; refined brand voice through consistent style and CTAs.</p>
+                                <p><strong>Front-End:</strong> Cart/checkout, responsive implementation.</p>
+                                <p><strong>Back-End:</strong> Payment, printer integration.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="case-section">
+                    <h2>Problem</h2>
+                    <p><strong>High fees and poor UX on third-party platforms hurt small businesses.</strong> </p>
+                    <p> Bentolicious relied on DoorDash for online orders, losing 25% per transaction. Their existing
+                        website was outdated, non-mobile-friendly, and lacked direct ordering—forcing customers to call
+                        in or use third-party apps.</p>
+                    <img class="case-image" src="./images/bento-commision.png" alt="Third-party Commission Fees"
+                        loading="lazy">
+                </section>
+
+                <section class="case-section">
+                    <h2>Research</h2>
+                    <p><strong>We conducted user survey across 100+ customers, below are some key insights:</strong></p>
+                    <ol>
+                        <li>68% preferred ordering directly to avoid fees.</li>
+                        <li>Top frustrations: menu readability, no pickup ETA, payment errors.</li>
+                    </ol>
+
+                    <div class="sidebyside-images">
+                        <div class="sidebyside-item"><img class="case-image" src="./images/bento-research1.png"
+                                alt="User survey visual" loading="lazy"></div>
+                        <div class="sidebyside-item"><img class="case-image" src="./images/bento-research2.png"
+                                alt="User survey visual" loading="lazy"></div>
+                    </div>
+
+                    <p>Through chatting with the store owners, we also noticed that staff struggled with manual order
+                        entry from phone calls, so printer integration was critical for kitchen workflow.</p>
+                    <h3>Ethnographic observation:</h3>
+                    <p class="case-note">
+                        Our team visited the restaurant to understand its culture and environment.
+
+                        We observed how the <strong>owners greeted regulars by name</strong>, displayed family photos
+                        behind the
+                        counter, and prepared each meal with visible care.
+
+                        This authenticity inspired the site’s warming tone and <strong>the slogan “Cooking From A
+                            Mother’s Heart”</strong>,
+                        reflecting the warmth and sincerity of the brand.</p>
+                    <img class="case-image" src="./images/bento-visit.jpeg" alt="Lighthouse performance report"
+                        loading="lazy">
+                    <h3>Competitor Analysis</h3>
+                    <div style="overflow:auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Platform</th>
+                                    <th>POS Integration</th>
+                                    <th>Low Commission Fee</th>
+                                    <th>Mobile-Friendly</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>DoorDash</td>
+                                    <td>✅</td>
+                                    <td>❌</td>
+                                    <td>✅</td>
+                                </tr>
+                                <tr>
+                                    <td>Old Bentolicious Site</td>
+                                    <td>❌</td>
+                                    <td>❌</td>
+                                    <td>❌</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Our Redesign</strong></td>
+                                    <td>✅</td>
+                                    <td>✅</td>
+                                    <td>✅</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="case-section">
+                    <h2>Idea</h2>
+                    <p>A responsive website with a streamlined menu, integrated pickup orders, and fee-free payments
+                        using PayPal.</p>
+                    <div class="sidebyside-images">
+                        <div class="sidebyside-item"><img class="case-image" src="./images/bento-menu.png"
+                                alt="Menu visual" loading="lazy"></div>
+                        <div class="sidebyside-item"><img class="case-image" src="./images/bento-paypal.png"
+                                alt="Checkout visual" loading="lazy"></div>
+                    </div>
+                </section>
+
+                <section class="case-section">
+                    <h2>Solution</h2>
+
+                    <h3>Technical Contributions</h3>
+                    <ol>
+                        <li><strong>Cart & Checkout:</strong> Dynamic cart with item adjustments (e.g., custom sides),
+                            optimized for mobile (85% of users).</li>
+                        <li><strong>Payment & POS:</strong> Paypal API integration and WebSocket-based auto-printing to
+                            kitchen printers for seamless order flow.</li>
+                        <li><strong>Performance:</strong> 95+ Lighthouse scores via lazy loading and image optimization
+                            on mobile.</li>
+                    </ol>
+
+                    <h3>UX Design Highlights</h3>
+                    <ol>
+                        <li><strong>Visual Style:</strong> Warm, soft tones and hand-drawn icons for a home-cooked feel.
+                        </li>
+                        <li><strong>Structure:</strong> Menu grouped into Bento, Sides, and Drinks for quick scanning.
+                        </li>
+                        <li><strong>Hierarchy & Readability:</strong> Consistent spacing, imagery, and headings for
+                            clarity.</li>
+                        <li><strong>Brand Voice:</strong> Warmth and authenticity in CTAs (e.g., <em>Cooking from a
+                                mother's
+                                heart”</em>).</li>
+                    </ol>
+
+                    <img class="case-image" src="./images/bento-lighthouse.png" alt="Lighthouse performance report"
+                        loading="lazy">
+                </section>
+
+                <section class="case-section">
+                    <h2>Beyond the Contract</h2>
+                    <p>After the official project ended, I <strong>voluntarily collaborated with the store owners for 3
+                            additional months</strong>, implementing new features, refining the design, and resolving
+                        usability issues based on customer feedback. I also <strong>trained the owner</strong> to
+                        independently update menu items, prices, and images, empowering them to manage the site without
+                        technical assistance.</p>
+                </section>
+                <section class="case-section">
+                    <h2>Reflection</h2>
+                    <p>
+                        This project reminded me how much of design is really about <strong>balance</strong>—between
+                        creativity and practicality, aesthetics and performance. I learned how to turn ideas into
+                        something that not only looks good but also <strong>feels effortless to use</strong>. Finding
+                        that balance between a <strong>visually rich menu</strong> and a <strong>fast, responsive
+                            site</strong> pushed me to think deeper about what truly matters to users. I also realized
+                        how much <strong>UX research shapes smart engineering decisions</strong>—it’s what turns a
+                        feature into something people actually enjoy. If I had more time, I’d add <strong>SMS order
+                            updates</strong> and a <strong>loyalty program</strong> to make the experience even more
+                        personal and rewarding.
+                    </p>
+                    <br>
+                    <p>Me with the store owner's son!!</p>
+                    <img class="case-image" src="./images/bento-son.JPG" alt="Lighthouse performance report"
+                        loading="lazy">
+                </section>
+
+
+            </div>
+
+            <aside>
+                <div class="case-section" style="padding:0; margin:0;">
+                    <img class="case-image" style="padding:0; margin:0;" src="./images/bentolicious.png"
+                        alt="Bentolicious cover" loading="lazy">
+                </div>
+
+                <div class="case-section">
+                    <h3>Live site</h3>
+                    <p><a href="https://bentolicious.us" target="_blank" rel="noopener">https://bentolicious.us</a></p>
+                </div>
+
+                <div class="case-section" style="padding:0; margin:0;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Order shift</td>
+                                <td>40%</td>
+                            </tr>
+                            <tr>
+                                <td>Monthly savings</td>
+                                <td>~$3k</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
+        </div>
+
+    </div>
+</body>
+
+</html>
